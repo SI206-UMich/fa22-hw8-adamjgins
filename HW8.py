@@ -56,19 +56,29 @@ def barchart_restaurant_categories(db_filename):
     rest_dict = {}
     final_dict = {}
 
-    rest = cur.execute("SELECT restaurants.category_id,categories.category FROM restaurants INNER JOIN categories ON restaurants.category_id = categories.id")
-
+    new  = cur.execute("SELECT categories.category, COUNT(*) FROM restaurants  INNER JOIN categories ON restaurants.category_id = categories.id GROUP BY restaurants.category_id")
     
 
-    for key,value in rest:
-        if value not in final_dict:
-            final_dict[value] = 1
-        else:
-            final_dict[value] = final_dict[value] +1
+    for row in new:
+        final_dict[row[0]] = row[1]
+      
+    final_dict = sorted(final_dict.items(), key=lambda x:x[1])
+    final_dict = dict(final_dict)
+    
 
 
+ 
     y_axis = list(final_dict.keys())
     x_axis = list(final_dict.values())   
+
+
+   
+
+    for row in new:
+        print(row)
+
+
+
 
 
 
