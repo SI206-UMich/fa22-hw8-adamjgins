@@ -68,15 +68,19 @@ def barchart_restaurant_categories(db_filename):
 
 
     y_axis = list(final_dict.keys())
-    x_axis = list(final_dict.values())        
+    x_axis = list(final_dict.values())   
+
+
 
     plt.barh(y_axis, x_axis)
-    plt.title('Types of Restaurants on South University AVE  ')
+    plt.title('Types of Restaurants on South University Ave')
     plt.ylabel('Restaurant Categories')
     plt.xlabel('Number of Restaurants')
     plt.show()
 
     return(final_dict)
+
+    #g
 
 
 
