@@ -9,6 +9,39 @@ def get_restaurant_data(db_filename):
     dictionaries. The key:value pairs should be the name, category, building, and rating
     of each restaurant in the database.
     """
+
+    con = sqlite3.connect(db_filename)
+    cur = con.cursor()
+
+    output_dict = {}
+    output_list = []
+    
+
+    new = cur.execute('SELECT restaurants.name, categories.category, buildings.building, restaurants.rating FROM restaurants INNER JOIN buildings ON restaurants.building_id = buildings.id INNER JOIN categories on restaurants.category_id =categories.id ')
+
+    for row in new:
+        output_dict['name'] = row[0]
+        output_dict['category'] = row[1]
+        output_dict['building'] = row[2]
+        output_dict['rating'] = row[3]
+      
+
+        output_list.append(output_dict)
+        output_dict = {}
+     
+
+        
+       
+
+    
+    return(output_list)
+
+
+        
+
+
+
+
     pass
 
 def barchart_restaurant_categories(db_filename):
@@ -17,6 +50,43 @@ def barchart_restaurant_categories(db_filename):
     restaurant categories and the values should be the number of restaurants in each category. The function should
     also create a bar chart with restaurant categories and the counts of each category.
     """
+    con = sqlite3.connect(db_filename)
+    cur = con.cursor()
+
+    rest_dict = {}
+    final_dict = {}
+
+    rest = cur.execute("SELECT restaurants.category_id,categories.category FROM restaurants INNER JOIN categories ON restaurants.category_id = categories.id")
+
+    
+
+    for key,value in rest:
+        if value not in final_dict:
+            final_dict[value] = 1
+        else:
+            final_dict[value] = final_dict[value] +1
+
+
+    y_axis = list(final_dict.keys())
+    x_axis = list(final_dict.values())        
+
+    plt.barh(y_axis, x_axis)
+    plt.title('Types of Restaurants on South University AVE  ')
+    plt.ylabel('Restaurant Categories')
+    plt.xlabel('Number of Restaurants')
+    plt.show()
+
+    return(final_dict)
+
+
+
+
+        
+
+
+  
+
+
     pass
 
 #EXTRA CREDIT
@@ -27,6 +97,9 @@ def highest_rated_category(db_filename):#Do this through DB as well
     in that category. This function should also create a bar chart that displays the categories along the y-axis
     and their ratings along the x-axis in descending order (by rating).
     """
+
+
+
     pass
 
 #Try calling your functions here
@@ -78,4 +151,7 @@ class TestHW8(unittest.TestCase):
 
 if __name__ == '__main__':
     main()
+    get_restaurant_data('South_U_Restaurants.db')
+    barchart_restaurant_categories('South_U_Restaurants.db')
+    
     unittest.main(verbosity=2)
