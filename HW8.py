@@ -53,7 +53,7 @@ def barchart_restaurant_categories(db_filename):
     con = sqlite3.connect(db_filename)
     cur = con.cursor()
 
-    rest_dict = {}
+
     final_dict = {}
 
     new  = cur.execute("SELECT categories.category, COUNT(*) FROM restaurants  INNER JOIN categories ON restaurants.category_id = categories.id GROUP BY restaurants.category_id")
@@ -111,8 +111,45 @@ def highest_rated_category(db_filename):#Do this through DB as well
     in that category. This function should also create a bar chart that displays the categories along the y-axis
     and their ratings along the x-axis in descending order (by rating).
     """
+    con = sqlite3.connect(db_filename)
+    cur = con.cursor()
+
+    final_dict = {}
+    new  = cur.execute("SELECT categories.category, AVG(restaurants.rating) FROM restaurants  INNER JOIN categories ON restaurants.category_id = categories.id GROUP BY restaurants.category_id")
+    
+    for row in new:
+        final_dict[row[0]] = row[1]
+      
+    final_dict = sorted(final_dict.items(), key=lambda x:x[1])
+
+    best = final_dict[-1]
+    final_dict = dict(final_dict)
+    
 
 
+ 
+    y_axis = list(final_dict.keys())
+    x_axis = list(final_dict.values())   
+
+
+   
+
+    
+
+
+
+
+
+
+    plt.barh(y_axis, x_axis)
+    plt.title('Types of Restaurants by Rating')
+    plt.ylabel('Restaurant Categories')
+    plt.xlabel('Average rating')
+    plt.show()
+
+   
+
+    return(best)
 
     pass
 
